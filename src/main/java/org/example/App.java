@@ -36,4 +36,30 @@ public class App
         //return matches
         return dataAssociatedWithFoodName;
     }
+    private static String letters(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Please Enter name of the food, only letters are expted:) ");
+        System.out.print(">");
+        String frutes = sc.next().strip().toLowerCase();
+        while(!isLetter(frutes)){
+            System.out.println("wrong input, please provide us with letters only");
+            System.out.print(">");
+            frutes = sc.next().strip().toLowerCase();
+
+        }
+
+
+
+        return frutes;
+    }
+
+    private static boolean isLetter(String input){
+        String str = input.toLowerCase();
+        for (int i = 0; i < str.length(); i++)
+            if (str.charAt(i) < 'a' || str.charAt(i) > 'z')
+                return false;
+
+        return true;
+
+    }
 }
