@@ -11,7 +11,7 @@ public class App
         //padding to reduce results
         foodName = (" "+foodName+" ");
 
-        File dataFile = new File(".\\Caloric data.txt");
+        File dataFile = new File(".\\Caloric_data.txt");
         FileReader dataReader = new FileReader(dataFile);
         BufferedReader bufferedDataReader = new BufferedReader(dataReader);
 
