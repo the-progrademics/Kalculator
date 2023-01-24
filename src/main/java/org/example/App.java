@@ -4,8 +4,10 @@ public class App
 {
     public static void main( String[] args ) throws IOException
     {
-        System.out.println(getCaloricInfo ("apple"));
-    }
+while(true){
+            String foodName = letters();
+            System.out.println(getCaloricInfo (foodName));
+        }    }
     //a method that take a food name, search for it in the Caloric_data file, and return result
     public static String getCaloricInfo (String foodName) throws IOException{
         //padding to reduce results
