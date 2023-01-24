@@ -1,6 +1,8 @@
 package org.example;
 import java.io.*;
-public class App 
+import java.util.Scanner;
+
+public class Kalculator
 {
     public static void main( String[] args ) throws IOException
     {
@@ -38,7 +40,7 @@ while(true){
         //return matches
         return dataAssociatedWithFoodName;
     }
-    private static String letters(){
+    public static String letters(){
         Scanner sc = new Scanner(System.in);
         System.out.println("Please Enter name of the food, only letters are expted:) ");
         System.out.print(">");
@@ -55,7 +57,7 @@ while(true){
         return frutes;
     }
 
-    private static boolean isLetter(String input){
+    public static boolean isLetter(String input){
         String str = input.toLowerCase();
         for (int i = 0; i < str.length(); i++)
             if (str.charAt(i) < 'a' || str.charAt(i) > 'z')

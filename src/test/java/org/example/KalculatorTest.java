@@ -7,15 +7,18 @@ import junit.framework.TestSuite;
 /**
  * Unit test for simple App.
  */
-public class AppTest 
+public class KalculatorTest
+
     extends TestCase
+
 {
+    private final Kalculator Kal = new Kalculator();
     /**
      * Create the test case
      *
      * @param testName name of the test case
      */
-    public AppTest( String testName )
+    public KalculatorTest(String testName )
     {
         super( testName );
     }
@@ -25,14 +28,14 @@ public class AppTest
      */
     public static Test suite()
     {
-        return new TestSuite( AppTest.class );
+        return new TestSuite( KalculatorTest.class );
     }
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
+
+    @org.junit.Test
+   void testApp()
     {
-        assertTrue( true );
+     assertEquals(false,Kal.isLetter("5"));
+        assertEquals(true,Kal.isLetter("a"));
     }
 }
