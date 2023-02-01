@@ -40,6 +40,19 @@ while(true){
         //return matches
         return dataAssociatedWithFoodName;
     }
+
+    public static int BMRCalculator(double[] info){
+        int BMR;
+        if(info[0]==0){
+            //Men BMR = 88.362 + (13.397 x weight in kg) + (4.799 x height in cm) - (5.677 x age in years)
+            BMR = (int) (88.362 + (13.397 * info[1]) + (4.799 * info[2]) - (5.677 * info[3]));
+        }else{
+            //Women BMR = 447.593 + (9.247 x weight in kg) + (3.098 x height in cm) - (4.330 x age in years)
+            BMR = (int) (447.593 + (9.247 * info[1]) + (3.098 * info[2]) - (4.330 * info[3]));
+        }
+        return BMR;
+    }
+
     public static String letters(){
         Scanner sc = new Scanner(System.in);
         System.out.println("Please Enter name of the food, only letters are expted:) ");
