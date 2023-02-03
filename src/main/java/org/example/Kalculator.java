@@ -9,6 +9,7 @@ public class Kalculator
 while(true){
             String foodName = letters();
             System.out.println(getCaloricInfo (foodName));
+            System.out.println("your BMR is : " + BMRCalculator(userInfo()));
         }    }
     //a method that take a food name, search for it in the Caloric_data file, and return result
     public static String getCaloricInfo (String foodName) throws IOException{
@@ -53,6 +54,28 @@ while(true){
         return BMR;
     }
 
+    public static double [] userInfo(){
+        Scanner sc = new Scanner(System.in);
+        double gender;
+        System.out.println("please provide us with your gender male or female");
+        String strGender = sc.next().toLowerCase();
+
+        while (!strGender.equalsIgnoreCase("male") && !strGender.equalsIgnoreCase("female")){
+            System.out.println("sorry we didn't understand, could you rewrite it?");
+            strGender = sc.next().toLowerCase();
+        }
+
+        gender = strGender.equalsIgnoreCase("male") ? 0 : 1;
+        System.out.println("Thank you!, now provide us with your weight in Kilogram pleas: ");
+        double wight = sc.nextDouble();
+        System.out.println("thank you again!, now please provide us with your height in centimeters: ");
+        double height = sc.nextDouble();
+        System.out.println("thank you for your time, lastly please provide us with your age in years");
+        double age = sc.nextDouble();
+
+        return new double[]{gender, wight, height, age};
+
+    }
     public static String letters(){
         Scanner sc = new Scanner(System.in);
         System.out.println("Please Enter name of the food, only letters are expted:) ");
@@ -62,11 +85,7 @@ while(true){
             System.out.println("wrong input, please provide us with letters only");
             System.out.print(">");
             frutes = sc.next().strip().toLowerCase();
-
         }
-
-
-
         return frutes;
     }
 
