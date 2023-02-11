@@ -1,5 +1,6 @@
 package org.example;
 import java.io.*;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Kalculator
@@ -11,6 +12,22 @@ while(true){
             System.out.println(getCaloricInfo (foodName));
             System.out.println("your BMR is : " + BMRCalculator(userInfo()));
         }    }
+
+    public static Boolean signUpIn(String username,String password,Boolean newUser) throws SQLException {
+        Boolean result= false;
+        try {
+            utils.DBConnection db = utils.DBConnection.getInstance();
+            SignUpInClient s = new SignUpInClient(username, password);
+            if(newUser){
+                result = s.signUp();
+            }else{
+                result = s.signIn();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+return result;
+    }
     //a method that take a food name, search for it in the Caloric_data file, and return result
     public static String getCaloricInfo (String foodName) throws IOException{
         //padding to reduce results
