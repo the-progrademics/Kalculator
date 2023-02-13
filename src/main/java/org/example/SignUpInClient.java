@@ -43,7 +43,7 @@ public class SignUpInClient {
             Connection dbConnection = utils.DBConnection.getInstance().getConnection();
             Statement stmt = dbConnection.createStatement();
             PreparedStatement signUpStmt =
-                    dbConnection.prepareStatement("INSERT INTO Sign-in/up (username, password) VALUES (?, ?);");
+                    dbConnection.prepareStatement("INSERT INTO signinup (username, password) VALUES (?, ?);");
             signUpStmt.setString(1, this.name);
             signUpStmt.setString(2, (this.password));
             int rows = signUpStmt.executeUpdate();
@@ -64,7 +64,7 @@ public class SignUpInClient {
             Connection dbConnection = utils.DBConnection.getInstance().getConnection();
             Statement stmt = dbConnection.createStatement();
             PreparedStatement signInStmt =
-                    dbConnection.prepareStatement("SELECT * from Sign-in/up where username=? and password=?;");
+                    dbConnection.prepareStatement("SELECT * from signinup where username=? and password=?;");
             signInStmt.setString(1, this.name);
             signInStmt.setString(2, (this.password));
             ResultSet rs = signInStmt.executeQuery();

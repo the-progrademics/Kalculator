@@ -2,17 +2,18 @@ package org.example;
 import java.io.*;
 import java.sql.SQLException;
 import java.util.Scanner;
-
+//____________________________________________________________________________________________________________________//
 public class Kalculator
 {
-    public static void main( String[] args ) throws IOException
-    {
+    public static void main( String[] args ) throws IOException, SQLException {
 while(true){
-            String foodName = letters();
+            mainMenu();
+            String foodName = foodName();
             System.out.println(getCaloricInfo (foodName));
             System.out.println("your BMR is : " + BMRCalculator(userInfo()));
-        }    }
 
+        }    }
+    //________________________________________________________________________________________________________________//
     public static Boolean signUpIn(String username,String password,Boolean newUser) throws SQLException {
         Boolean result= false;
         try {
@@ -58,7 +59,7 @@ return result;
         //return matches
         return dataAssociatedWithFoodName;
     }
-
+    //________________________________________________________________________________________________________________//
     public static int BMRCalculator(double[] info){
         int BMR;
         if(info[0]==0){
@@ -70,8 +71,9 @@ return result;
         }
         return BMR;
     }
-
+    //________________________________________________________________________________________________________________//
     public static double [] userInfo(){
+        // before asking user can choicee get BMR or search for food
         Scanner sc = new Scanner(System.in);
         double gender;
         System.out.println("please provide us with your gender male or female");
@@ -93,7 +95,8 @@ return result;
         return new double[]{gender, wight, height, age};
 
     }
-    public static String letters(){
+    //________________________________________________________________________________________________________________//
+    public static String foodName(){
         Scanner sc = new Scanner(System.in);
         System.out.println("Please Enter name of the food, only letters are expted:) ");
         System.out.print(">");
@@ -105,7 +108,7 @@ return result;
         }
         return frutes;
     }
-
+    //________________________________________________________________________________________________________________//
     public static boolean isLetter(String input){
         String str = input.toLowerCase();
         for (int i = 0; i < str.length(); i++)
@@ -115,4 +118,112 @@ return result;
         return true;
 
     }
+    //________________________________________________________________________________________________________________//
+    public static void registration(boolean newUser) throws SQLException {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("please provide us with your user name: ");
+        String userName = sc.next();
+        System.out.println("now please provide us with your password: ");
+        String password = sc.next();
+        signUpIn(userName,password,newUser);
+
+
+    }
+    //________________________________________________________________________________________________________________//
+    public static void mainMenu() throws SQLException {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("""
+                Welcome to Kalculator!
+                member of the family? please type 1
+                wanna be a member? please type 2
+                or type 3 to skip (being a member will give you a full monitoring to your biometric signs)""");
+        int choice = sc.nextInt();
+
+        switch (choice){
+            // note: add welcome with name and welcome with guest
+            case 1:
+                System.out.println("welcome back!");
+                registration(false);
+                break;
+            case 2:
+                System.out.println("we are honored!");
+                registration(true);
+                break;
+            case 3 :
+                subMenu();
+                break;
+
+
+        }
+    }
+    //________________________________________________________________________________________________________________//
+    public static void subMenu(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("""
+                Now what would you like to do?
+                1- search for a meal
+                2- calculate your BMR
+                """);
+        int choice = sc.nextInt();
+        switch (choice){
+            case 1: foodName(); break;
+            case 2: userInfo(); break;
+        }
+
+
+    }
+    //________________________________________________________________________________________________________________//
+    public static void logedInSubMenu(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("""
+                Now what would you like to do?(digit only)
+                1- search for a meal
+                2- enter last meal
+                3- calculate your BMR
+                4- statistics""");
+        int choice = sc.nextInt();
+        switch (choice){
+
+            case 1: foodName(); break;
+            //________________________________________________________________________________________________________//
+            case 2:
+                System.out.println("please provide me with your meal name: ");
+                String mealName = sc.next();
+                System.out.println("meal's calorie: ");
+                int calorie = sc.nextInt();
+                // call method (name,calorie);
+                break;
+
+            //________________________________________________________________________________________________________//
+            case 3:
+                System.out.println("""
+                        would you like to save your BMR information? (digit only)
+                        1- yes
+                        2- no (you will have to re-enter your information next time also)""");
+                int bmrInfo = sc.nextInt();
+                switch (bmrInfo){
+                    case 1: break;
+                    case 2: break;
+                }
+            break;
+
+            //________________________________________________________________________________________________________//
+            case 4:
+                System.out.println("""
+                        Okay let's see ;)
+                        how do you like it?(digit only)
+                        1-weekly
+                        2-monthly
+                        """);
+                int type = sc.nextInt();
+                switch (type){
+                    case 1: break;
+                    case 2: break;
+                }
+                break;
+        }
+
+
+    }
 }
+
