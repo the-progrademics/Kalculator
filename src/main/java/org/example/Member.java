@@ -155,7 +155,7 @@ public class Member {
             Connection dbConnection = utils.DBConnection.getInstance().getConnection();
             Statement stmt = dbConnection.createStatement();
             PreparedStatement signInStmt =
-                    dbConnection.prepareStatement("SELECT cals FROM mealseaten WHERE username=? and date > now() - interval '? day';");
+                    dbConnection.prepareStatement("SELECT SUM(cals) FROM mealseaten WHERE username=? and date > now() - interval '? day';");
             signInStmt.setString(1, this.name);
             signInStmt.setInt(2, (actualLength));
             ResultSet rs = signInStmt.executeQuery();
