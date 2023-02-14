@@ -237,9 +237,9 @@ return result;
         }else{
             this.gender =1;
         }
-        this.weight = info[0];
-        this.height = info[1];
-        this.age = info[2];
+        this.weight = info[1];
+        this.height = info[2];
+        this.age = info[3];
     }
 
 
