@@ -14,23 +14,23 @@ while(true){
 
         }    }
     //________________________________________________________________________________________________________________//
-    public static Boolean signUpIn(String username,String password,Boolean newUser) throws SQLException {
-        Boolean result= false;
+    public static Member signUpIn(String username,String password,Boolean newUser) throws SQLException {
+        Member s = null;
         try {
             utils.DBConnection db = utils.DBConnection.getInstance();
-            SignUpInClient s = new SignUpInClient(username, password);
+            s = new Member(username, password);
             if(newUser){
-                result = s.signUp();
+               s.signUp();
             }else{
-                result = s.signIn();
+               s.signIn();
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-return result;
+return s;
     }
     //a method that take a food name, search for it in the Caloric_data file, and return result
-    public static String getCaloricInfo (String foodName) throws IOException{
+    public static String getCaloricInfo (String foodName, Member member) throws IOException{
         //padding to reduce results
         foodName = (" "+foodName+" ");
 
@@ -51,6 +51,10 @@ return result;
             }
         }
         bufferedDataReader.close();
+        //members search snippet
+        if(member != null && member.getSignedIn()){
+            dataAssociatedWithFoodName = dataAssociatedWithFoodName.concat(member.searchPersonalMeals(foodName));
+        }
 
         //if we've got no matches return "sorry" message
         if(dataAssociatedWithFoodName.equals("")){
@@ -62,7 +66,7 @@ return result;
     //________________________________________________________________________________________________________________//
     public static int BMRCalculator(double[] info){
         int BMR;
-        if(info[0]==0){
+        if(info[0]<1){
             //Men BMR = 88.362 + (13.397 x weight in kg) + (4.799 x height in cm) - (5.677 x age in years)
             BMR = (int) (88.362 + (13.397 * info[1]) + (4.799 * info[2]) - (5.677 * info[3]));
         }else{
@@ -72,28 +76,44 @@ return result;
         return BMR;
     }
     //________________________________________________________________________________________________________________//
-    public static double [] userInfo(){
-        // before asking user can choicee get BMR or search for food
-        Scanner sc = new Scanner(System.in);
-        double gender;
-        System.out.println("please provide us with your gender male or female");
-        String strGender = sc.next().toLowerCase();
+    public static double [] userInfo(Member member){
+        double[] info = new double[4];
+        if(member != null && member.getSignedIn()&& member.getHeight() > 0) {
+            info[0] = member.getGender();
+            info[1] = member.getWeight();
+            info[2] = member.getHeight();
+            info[3] = member.getAge();
+        }else {
+            // before asking user can choicee get BMR or search for food
+            Scanner sc = new Scanner(System.in);
+            double gender;
+            System.out.println("please provide us with your gender male or female");
+            String strGender = sc.next().toLowerCase();
 
-        while (!strGender.equalsIgnoreCase("male") && !strGender.equalsIgnoreCase("female")){
-            System.out.println("sorry we didn't understand, could you rewrite it?");
-            strGender = sc.next().toLowerCase();
+            while (!strGender.equalsIgnoreCase("male") && !strGender.equalsIgnoreCase("female")) {
+                System.out.println("sorry we didn't understand, could you rewrite it?");
+                strGender = sc.next().toLowerCase();
+            }
+
+            gender = strGender.equalsIgnoreCase("male") ? 0 : 1;
+            System.out.println("Thank you!, now provide us with your weight in Kilogram pleas: ");
+            double wight = sc.nextDouble();
+            System.out.println("thank you again!, now please provide us with your height in centimeters: ");
+            double height = sc.nextDouble();
+            System.out.println("thank you for your time, lastly please provide us with your age in years");
+            double age = sc.nextDouble();
+
+            //if user wants to save info
+            if (member != null && member.getSignedIn()) {
+                member.saveInfo(new double[]{gender, wight, height, age});
+            }
+
+            info[0] = gender;
+            info[1] = wight;
+            info[2] = height;
+            info[3] = age;
         }
-
-        gender = strGender.equalsIgnoreCase("male") ? 0 : 1;
-        System.out.println("Thank you!, now provide us with your weight in Kilogram pleas: ");
-        double wight = sc.nextDouble();
-        System.out.println("thank you again!, now please provide us with your height in centimeters: ");
-        double height = sc.nextDouble();
-        System.out.println("thank you for your time, lastly please provide us with your age in years");
-        double age = sc.nextDouble();
-
-        return new double[]{gender, wight, height, age};
-
+        return info;
     }
     //________________________________________________________________________________________________________________//
     public static String foodName(){
@@ -180,7 +200,8 @@ return result;
                 1- search for a meal
                 2- enter last meal
                 3- calculate your BMR
-                4- statistics""");
+                4- statistics
+                5- add meals""");
         int choice = sc.nextInt();
         switch (choice){
 
@@ -220,6 +241,14 @@ return result;
                     case 1: break;
                     case 2: break;
                 }
+                break;
+            case 5:
+                System.out.println("""
+                        enter the name of the meal:
+                        enter the number of cals in the meal:
+                        """);
+                int type = sc.nextInt();
+
                 break;
         }
 
