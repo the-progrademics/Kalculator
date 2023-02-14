@@ -159,8 +159,8 @@ public class Member {
             signInStmt.setString(1, this.name);
             signInStmt.setInt(2, (actualLength));
             ResultSet rs = signInStmt.executeQuery();
-            while(rs.next()){
-                totalCals = totalCals + rs.getInt("cals");
+            if(rs.next()){
+                totalCals = rs.getInt("sum");
             }
         } catch (SQLException e) {
             e.printStackTrace();
