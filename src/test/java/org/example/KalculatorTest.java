@@ -16,25 +16,25 @@ public class KalculatorTest
 {
     private final Kalculator Kal = new Kalculator();
 
-    @org.junit.Test
+    @Test
    public void testApp()
     {
      assertEquals(false,Kal.isLetter("5"));
         assertEquals(true,Kal.isLetter("a"));
     }
 
-    @org.junit.Test
+    @Test
     public void testBMR (){
         assertEquals(1652,BMRCalculator(new double[] {0,70,160,25}));
         assertEquals(1482,BMRCalculator(new double[] {1,70,160,25}));
     }
-    @org.junit.Test
+    @Test
     public void testGetCaloricInfo() throws Exception {
         assertEquals("Sorry, we have no data associated with the food you typed",getCaloricInfo ("fake food", null));
         assertEquals("Sherbet Orange\n"+" contains: 144 Calories per 100 grams.\n"+"\n",getCaloricInfo ("Sherbet Orange", null));
         assertEquals("Falafel\n" + " contains: 333 Calories per 100 grams.\n" +"\n" +"falafel\n" +" contains: 650 Calories per 100 grams.\n" +"\n",getCaloricInfo ("falafel", maleTestSubject()));
     }
-    @org.junit.Test
+    @Test
     public void testMember(){
         Member member = maleTestSubject();
 
@@ -50,7 +50,7 @@ public class KalculatorTest
         assertEquals(160,member.getHeight());
         assertEquals(25,member.getAge());
     }
-    @org.junit.Test
+    @Test
     public void testSignUpIn() throws SQLException {
         //existing user tset
         Member ahmad = new Member("ahmad","123");
@@ -66,7 +66,7 @@ public class KalculatorTest
         assertTrue(newUser.equals(returnedNewUser));
         //errors test
     }
-    @org.junit.Test
+    @Test
     public void testMemberSignInAndSignUp() throws SQLException {
         Member ahmad = new Member("ahmad","123");
         assertFalse(ahmad.signUp());
@@ -77,7 +77,7 @@ public class KalculatorTest
         assertFalse(newUser.signIn());
         assertTrue(newUser.signUp());
     }
-    @org.junit.Test
+    @Test
     public void testAddCustomMeal() throws SQLException {
         Member ahmad = maleTestSubject();
         String foodName = "testFood"+Math.random();
@@ -94,7 +94,7 @@ public class KalculatorTest
         assertTrue(rs.next());
     }
 
-    @org.junit.Test
+    @Test
     public void testRegisterMeal() throws SQLException {
         Member ahmad = maleTestSubject();
         String foodName = "testFood"+Math.random();
@@ -111,7 +111,7 @@ public class KalculatorTest
         assertTrue(rs.next());
     }
 
-    @org.junit.Test
+    @Test
     public void testTellMeTheStats() throws SQLException {
         Member testMan = new Member("the invesible man", "***");
         assertEquals("over the last 1 you are still under the ideal limit for your BMR by:  75Calories",testMan.stats(1));
