@@ -5,7 +5,7 @@ import java.util.Scanner;
 //____________________________________________________________________________________________________________________//
 public class Kalculator
 {
-    public static void main( String[] args ) throws IOException, SQLException {
+    public static void main( String[] args ) throws Exception {
 while(true){
             mainMenu();
             /*String foodName = foodName();
@@ -16,7 +16,6 @@ while(true){
     //________________________________________________________________________________________________________________//
     public static Member signUpIn(String username,String password,Boolean newUser) throws SQLException {
         Member s = null;
-        try {
             utils.DBConnection db = utils.DBConnection.getInstance();
             s = new Member(username, password);
             if(newUser){
@@ -24,15 +23,13 @@ while(true){
             }else{
                s.signIn();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
 return s;
     }
     //a method that take a food name, search for it in the Caloric_data file, and return result
-    public static String getCaloricInfo (String foodName, Member member) throws IOException{
-        //padding to reduce results
-        foodName = (" "+foodName+" ");
+    public static String getCaloricInfo (String foodName, Member member) throws Exception {
+        //padding to reduce results (gives bad results)
+        //foodName = (" "+foodName+" ");
 
         File dataFile = new File(".\\Caloric_data.txt");
         FileReader dataReader = new FileReader(dataFile);
@@ -159,7 +156,7 @@ return s;
 
     }
     //________________________________________________________________________________________________________________//
-    public static void mainMenu() throws SQLException, IOException {
+    public static void mainMenu() throws Exception {
         Scanner sc = new Scanner(System.in);
         Member user;
         System.out.println("""
@@ -191,7 +188,7 @@ return s;
 
     }
     //________________________________________________________________________________________________________________//
-    public static void geustMenu() throws IOException {
+    public static void geustMenu() throws Exception {
         Scanner sc = new Scanner(System.in);
         System.out.println("""
                 Now what would you like to do?
@@ -209,7 +206,7 @@ return s;
 
     }
     //________________________________________________________________________________________________________________//
-    public static void logedInSubMenu(Member member) throws IOException {
+    public static void logedInSubMenu(Member member) throws Exception {
         while(true){
         Scanner sc = new Scanner(System.in);
         System.out.println("""

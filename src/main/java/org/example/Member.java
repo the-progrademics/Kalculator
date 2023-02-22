@@ -39,6 +39,7 @@ public class Member {
     }
 
 
+
     public String getName() {
         return name;
     }
@@ -67,8 +68,11 @@ public class Member {
         return age;
     }
 
-    public Boolean signUp(){
-        try {
+    public Boolean signUp() throws SQLException {
+        if(isSignedUp()){
+            System.out.println("ERROR: username already exists.");
+            return false;
+        }else{
             Connection dbConnection = utils.DBConnection.getInstance().getConnection();
             Statement stmt = dbConnection.createStatement();
             PreparedStatement signUpStmt =
@@ -76,19 +80,29 @@ public class Member {
             signUpStmt.setString(1, this.name);
             signUpStmt.setString(2, (this.password));
             int rows = signUpStmt.executeUpdate();
-            if (rows == 0){
-                System.out.println("ERROR: username already exists.");
-            }else{
+            if (rows != 0){
                 this.signedIn= true;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return signedIn;
+        //the return of else
+        return true;
+    }
+    private boolean isSignedUp() throws SQLException {
+        boolean signedUp = false;
+        Connection dbConnection = utils.DBConnection.getInstance().getConnection();
+        Statement stmt = dbConnection.createStatement();
+        PreparedStatement signInStmt =
+                dbConnection.prepareStatement("SELECT * from signinup where username=? and password=?;");
+        signInStmt.setString(1, this.name);
+        signInStmt.setString(2, (this.password));
+        ResultSet rs = signInStmt.executeQuery();
+        if(rs.next()){
+            signedUp = true;
+        }
+        return signedUp;
     }
 
-    public Boolean signIn(){
-        try {
+    public Boolean signIn() throws SQLException {
             Connection dbConnection = utils.DBConnection.getInstance().getConnection();
             Statement stmt = dbConnection.createStatement();
             PreparedStatement signInStmt =
@@ -100,102 +114,66 @@ public class Member {
                 System.out.println("Signed-in successfully.");
                 this.signedIn=true;
             }else{
-                System.out.println("ERROR: username or password is wrong.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+                System.out.println("ERROR: username or password is wrong.");}
+        return signedIn;}
+    public Boolean addCustomMeal(String foodname, int cals) throws SQLException {
+            Connection dbConnection = utils.DBConnection.getInstance().getConnection();
+            Statement stmt = dbConnection.createStatement();
+            PreparedStatement pStmt =
+                    dbConnection.prepareStatement("INSERT INTO cmeals (username, foodname, cals) VALUES (?, ?, ?);");
+            pStmt.setString(1, this.name);
+            pStmt.setString(2, foodname);
+            pStmt.setInt(3, cals);
+            pStmt.executeUpdate();
         return signedIn;
     }
 
-    public Boolean addCustomMeal(String foodname, int cals){
-        try {
+    public Boolean registerMeal(String foodname, int cals) throws SQLException {
             Connection dbConnection = utils.DBConnection.getInstance().getConnection();
             Statement stmt = dbConnection.createStatement();
             PreparedStatement signUpStmt =
-                    dbConnection.prepareStatement("INSERT INTO cmeal (username, foodname, cals) VALUES (?, ?, ?);");
+                    dbConnection.prepareStatement("INSERT INTO mealseaten (username, foodname, cals, date) VALUES (?, ?, ?, '"+getCurrentDate()+"');");
             signUpStmt.setString(1, this.name);
             signUpStmt.setString(2, foodname);
             signUpStmt.setInt(3, cals);
             signUpStmt.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return signedIn;
-    }
-
-    public Boolean registerMeal(String foodname, int cals){
-        try {
-            Connection dbConnection = utils.DBConnection.getInstance().getConnection();
-            Statement stmt = dbConnection.createStatement();
-            PreparedStatement signUpStmt =
-                    dbConnection.prepareStatement("INSERT INTO mealseaten (username, foodname, cals, date) VALUES (?, ?, ?, ?);");
-            signUpStmt.setString(1, this.name);
-            signUpStmt.setString(2, foodname);
-            signUpStmt.setInt(3, cals);
-            signUpStmt.setString(4, getCurrentDate());
-            signUpStmt.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return signedIn;
-    }
-
+        return signedIn;}
     private String getCurrentDate(){
         DateTimeFormatter wantedFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return wantedFormat.format(LocalDateTime.now());
     }
-
-    public String stats(int length){
+    public String stats(int length) throws SQLException {
         int actualLength=getActualLength(length);
         int totalCals = 0;
-        try {
             Connection dbConnection = utils.DBConnection.getInstance().getConnection();
             Statement stmt = dbConnection.createStatement();
             PreparedStatement signInStmt =
-                    dbConnection.prepareStatement("SELECT SUM(cals) FROM mealseaten WHERE username=? and date > now() - interval '? day';");
+                    dbConnection.prepareStatement("SELECT SUM(cals) FROM mealseaten WHERE username=? and date > now() - interval '"+actualLength+" day';");
             signInStmt.setString(1, this.name);
-            signInStmt.setInt(2, (actualLength));
             ResultSet rs = signInStmt.executeQuery();
             if(rs.next()){
-                totalCals = rs.getInt("sum");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return tellMeTheStats(totalCals,length);
-    }
-
+                totalCals = rs.getInt("sum");}
+        return tellMeTheStats(totalCals,length);}
     private String tellMeTheStats(int totalCals, int length){
         int result = getIdealCals(length) - totalCals;
         String resultStatement = "";
         if(result < 0){
-            resultStatement = ("over the last "+length+" you went over the ideal limit for your BMR by:  "+ result+"Calories");
-        }else{
-            resultStatement = ("over the last "+length+" you are still under the ideal limit for your BMR by:  "+ result+"Calories");
-        }
-        return resultStatement;
-    }
+            resultStatement = ("over the last "+length+" you went over the ideal limit for your BMR by:  "+ result*-1+"Calories");} else{
+            resultStatement = ("over the last "+length+" you are still under the ideal limit for your BMR by:  "+ result+"Calories");}
+        return resultStatement;}
     private int getIdealCals(int length){
-        return (BMRCalculator(new double[]{this.gender,this.weight,this.height,this.age})) * length;
-    }
-
-    private int getActualLength(int length){
+        return (BMRCalculator(new double[]{this.gender,this.weight,this.height,this.age})) * length;}
+    private int getActualLength(int length) throws SQLException {
         int actualLength=-1;
         int oldestEntry = oldestEntry();
         if(length>oldestEntry){
             actualLength=oldestEntry;
         }else{
-            actualLength=length;
-        }
-        return actualLength;
-    }
+            actualLength=length;}
+        return actualLength;}
 
-    private int oldestEntry(){
+    private int oldestEntry() throws SQLException {
         int result =-1;
-        try {
             Connection dbConnection = utils.DBConnection.getInstance().getConnection();
             Statement stmt = dbConnection.createStatement();
             PreparedStatement signInStmt =
@@ -204,19 +182,16 @@ public class Member {
             if(rs.next()){
                 result = rs.getInt("min");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 return result;
     }
 
-    public String searchPersonalMeals(String foodname){
+    public String searchPersonalMeals(String foodname) throws Exception{
         String results = "";
-        try {
+        foodname = "%"+foodname+"%";
             Connection dbConnection = utils.DBConnection.getInstance().getConnection();
             Statement stmt = dbConnection.createStatement();
             PreparedStatement signInStmt =
-                    dbConnection.prepareStatement("SELECT foodname,cals from cmeal where username=? and foodname like '%?%';");
+                    dbConnection.prepareStatement("SELECT foodname,cals from cmeals where username=? and foodname like ?;");
             signInStmt.setString(1, this.name);
             signInStmt.setString(2, (foodname));
             ResultSet rs = signInStmt.executeQuery();
@@ -225,16 +200,10 @@ return result;
                 int cals = rs.getInt("cals");
                 results = results.concat(foodN+"\n contains: "+cals+" Calories per 100 grams."+"\n\n");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return results;
-    }
-
+        return results;}
     public void saveInfo(double[] info){
         if(info[0] < 1){
-            this.gender =0;
-        }else{
+            this.gender =0;} else{
             this.gender =1;
         }
         this.weight = info[1];
@@ -242,5 +211,10 @@ return result;
         this.age = info[3];
     }
 
-
-}
+    public boolean equals(Member member){
+        boolean result = true;
+        if(!(this.name == member.getName() && this.password == member.getPassword() && this.signedIn == member.getSignedIn() && this.gender == member.getGender() && this.weight  == member.getWeight() && this.height == member.getHeight() && this.age == member.getAge())){
+            result = false;
+        }
+        return result;
+    }}
