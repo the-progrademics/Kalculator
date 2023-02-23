@@ -170,7 +170,7 @@ return s;
                 wanna be a member? please type 2
                 or type 3 to skip (being a member will give you a full monitoring to your biometric signs)""");
         char choice = sc.next().charAt(0);
-        while (choice != '1' || choice != '2' ||choice != '3') {
+        while ((choice != '1') && (choice != '2') && (choice != '3')) {
             System.out.println("please enter a valid number (1,2,3)");
             choice = sc.next().charAt(0);
 
