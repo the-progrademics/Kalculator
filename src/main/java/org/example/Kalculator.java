@@ -170,10 +170,10 @@ return s;
                 wanna be a member? please type 2
                 or type 3 to skip (being a member will give you a full monitoring to your biometric signs)""");
         char choice = sc.next().charAt(0);
-        while ((choice != '1') && (choice != '2') && (choice != '3')) {
+        while ((choice != '1') && (choice != '2') && (choice != '3'))
+        {
             System.out.println("please enter a valid number (1,2,3)");
             choice = sc.next().charAt(0);
-
         }
         switch (choice){
             // note: add welcome with name and welcome with guest
@@ -219,7 +219,8 @@ return s;
 
     }
     //________________________________________________________________________________________________________________//
-    public static void logedInSubMenu(Member member) throws Exception {
+    public static void logedInSubMenu(Member member) throws Exception
+    {
         while(true){
         Scanner sc = new Scanner(System.in);
         System.out.println("""
@@ -229,53 +230,72 @@ return s;
                 3- calculate your BMR
                 4- statistics
                 5- add meals""");
-        int choice = sc.nextInt();
-        switch (choice){
+            char choice = sc.next().charAt(0);
+            while ((choice != '1') && (choice != '2') && (choice != '3') && (choice != '4') && (choice != '5'))
+            {
+                System.out.println("please enter a valid number (1,2,3,4,5)");
+                choice = sc.next().charAt(0);
+            }
+            switch (choice){
 
-            case 1: System.out.println(getCaloricInfo(foodName(), member)); break;
-            //________________________________________________________________________________________________________//
-            case 2:
-                System.out.println("please provide me with your last meal name: ");
-                String mealName = sc.next();
-                System.out.println("meal's calorie: ");
-                int calorie = sc.nextInt();
-                member.registerMeal(mealName,calorie);
-                break;
+                case '1':
+                    System.out.println(getCaloricInfo(foodName(), member));
+                    break;
 
-            //________________________________________________________________________________________________________//
-            case 3:
-                System.out.println("Your BMR is : "+BMRCalculator(userInfo(member))); break;
+                  //________________________________________________________________________________________________________//
+                case '2':
+                    System.out.println("please provide me with your last meal name: ");
+                    String mealName = sc.next();
+                    System.out.println("meal's calorie: ");
+                    int calorie = sc.nextInt();
+                    member.registerMeal(mealName,calorie);
+                    break;
+
+                //________________________________________________________________________________________________________//
+                case '3':
+                    System.out.println("Your BMR is : "+BMRCalculator(userInfo(member)));
+                    break;
 
 
-            //________________________________________________________________________________________________________//
-            case 4:
-                System.out.println("""
-                        Okay let's see ;)
-                        how do you like it?(digit only)
-                        1-weekly(7 days)
-                        2-monthly(30 days)
-                        3-custom
-                        """);
-                int type = sc.nextInt();
-                switch (type){
-                    case 1: member.stats(7);break;
-                    case 2: member.stats(30);break;
-                    case 3:
-                        System.out.print("how many days you want to calculate(digit only)");
-                        member.stats(sc.nextInt());
-                }
-                break;
-            case 5:
-                System.out.println("please provide me with your new meal name: ");
-                String newMealName = sc.next();
-                System.out.println("meal's calorie: ");
-                int newCalorie = sc.nextInt();
-                member.addCustomMeal(newMealName,newCalorie);
-                break;
+                //________________________________________________________________________________________________________//
+                case '4':
+                    System.out.println("""
+                            Okay let's see ;)
+                            how do you like it?(digit only)
+                            1-weekly(7 days)
+                            2-monthly(30 days)
+                            3-custom
+                            """);
+
+                    char type = sc.next().charAt(0);
+                    while ((type != '1') && (type != '2') && (type != '3'))
+                    {
+                        System.out.println("please enter a valid number (1,2,3)");
+                        type = sc.next().charAt(0);
+                    }
+                    switch (type)
+                        {
+                        case '1':
+                            member.stats(7);
+                            break;
+                        case '2':
+                            member.stats(30);
+                            break;
+                        case '3':
+                            System.out.print("how many days you want to calculate(digit only)");
+                            member.stats(sc.nextInt());
+                        }
+                        break;
+                case '5':
+                    System.out.println("please provide me with your new meal name: ");
+                    String newMealName = sc.next();
+                    System.out.println("meal's calorie: ");
+                    int newCalorie = sc.nextInt();
+                    member.addCustomMeal(newMealName,newCalorie);
+                    break;
+            }
         }
-
-
-    }}
+    }
 
 
 

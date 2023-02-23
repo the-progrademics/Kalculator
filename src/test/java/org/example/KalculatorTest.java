@@ -14,6 +14,16 @@ import static org.junit.jupiter.api.Assertions.*;
 public class KalculatorTest
 
 {
+
+
+    @Test
+    public void testUserInfo(){
+        var member = new Member("ahmed", "123");
+        member = maleTestSubject();
+
+        assertEquals("0 70 160 25","%d %d %d %d".formatted(member.getGender(),(int)member.getWeight(),(int)member.getHeight(),(int)member.getAge()));
+        assertEquals(" ", userInfo(null));
+    }
     private final Kalculator Kal = new Kalculator();
 
     @Test
@@ -117,22 +127,6 @@ public class KalculatorTest
         assertEquals("over the last 1 you are still under the ideal limit for your BMR by:  75Calories",testMan.stats(1));
         assertEquals("over the last -1 you went over the ideal limit for your BMR by:  75Calories",testMan.stats(-1));
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     public Member maleTestSubject(){
         Member member = new Member("ahmad","123");
