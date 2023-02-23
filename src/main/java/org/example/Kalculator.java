@@ -1,4 +1,6 @@
 package org.example;
+import org.postgresql.util.PSQLException;
+
 import java.io.*;
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -7,10 +9,9 @@ public class Kalculator
 {
     public static void main( String[] args ) throws Exception {
 while(true){
+            System.out.println();
             mainMenu();
-            /*String foodName = foodName();
-            System.out.println(getCaloricInfo (foodName));
-            System.out.println("your BMR is : " + BMRCalculator(userInfo()));*/
+
 
         }    }
     //________________________________________________________________________________________________________________//
@@ -146,12 +147,15 @@ return s;
 
     }
     //________________________________________________________________________________________________________________//
-    public static Member registration(boolean newUser) throws SQLException {
+    public static Member registration(boolean newUser) throws Exception {
+
         Scanner sc = new Scanner(System.in);
+
         System.out.println("please provide us with your user name: ");
         String userName = sc.next();
         System.out.println("now please provide us with your password: ");
         String password = sc.next();
+
         return signUpIn(userName,password,newUser);
 
     }
@@ -159,27 +163,36 @@ return s;
     public static void mainMenu() throws Exception {
         Scanner sc = new Scanner(System.in);
         Member user;
+
         System.out.println("""
                 Welcome to Kalculator!
                 member of the family? please type 1
                 wanna be a member? please type 2
                 or type 3 to skip (being a member will give you a full monitoring to your biometric signs)""");
-        int choice = sc.nextInt();
+        char choice = sc.next().charAt(0);
+        while (choice != '1' || choice != '2' ||choice != '3') {
+            System.out.println("please enter a valid number (1,2,3)");
+            choice = sc.next().charAt(0);
 
+        }
         switch (choice){
             // note: add welcome with name and welcome with guest
-            case 1:
+            case '1':
                 System.out.println("welcome back!");
                 user = registration(false);
 
                 logedInSubMenu(user);
                 break;
-            case 2:
+            case '2':
                 System.out.println("we are honored!");
+
                 user = registration(true);
                 logedInSubMenu(user);
+
+
+
                 break;
-            case 3 :
+            case '3' :
                 geustMenu();
                 break;
 
@@ -263,5 +276,8 @@ return s;
 
 
     }}
+
+
+
 }
 
