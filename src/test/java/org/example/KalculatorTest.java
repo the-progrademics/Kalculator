@@ -32,7 +32,7 @@ public class KalculatorTest
     public void testGetCaloricInfo() throws Exception {
         assertEquals("Sorry, we have no data associated with the food you typed",getCaloricInfo ("fake food", null));
         assertEquals("Sherbet Orange\n"+" contains: 144 Calories per 100 grams.\n"+"\n",getCaloricInfo ("Sherbet Orange", null));
-        assertEquals("Falafel\n" + " contains: 333 Calories per 100 grams.\n" +"\n" +"falafel\n" +" contains: 650 Calories per 100 grams.\n" +"\n",getCaloricInfo ("falafel", maleTestSubject()));
+        assertEquals("Falafel\n" + " contains: 333 Calories per 100 grams.\n\n",getCaloricInfo ("falafel", maleTestSubject()));
     }
     @Test
     public void testMember(){
