@@ -1,6 +1,6 @@
 coverage
 ----------------------
-![Alt text](relative%20path/to/TEST_COVERAGE.png?raw=true "coerage results")
+![TEST_COVERAGE](https://user-images.githubusercontent.com/120630403/221122934-7ccf1e24-0684-4f36-b6f5-bae0676edd59.png)
 
 Database prerequisets to running the program or tests:
 
