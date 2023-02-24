@@ -1,6 +1,6 @@
 coverage
 ----------------------
-![Alt text](relative%20path/to/TEST_COVERAGE.PNG?raw=true "coerage results")
+![Alt text](relative%20path/to/TEST_COVERAGE.png?raw=true "coerage results")
 
 Database prerequisets to running the program or tests:
 
