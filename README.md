@@ -1,6 +1,6 @@
 coverage
 ----------------------
-	https://github.com/the-progrademics/Kalculator/main/TEST_COVERAGE.PNG?raw=true)
+![Alt text](relative%20path/to/TEST_COVERAGE.PNG?raw=true "coerage results")
 
 Database prerequisets to running the program or tests:
 
