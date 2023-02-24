@@ -10,7 +10,8 @@ public class Kalculator
     public static void main( String[] args ) throws Exception {
 while(true){
             System.out.println();
-            mainMenu();
+
+            mainMenu(System.in);
 
 
         }    }
@@ -74,16 +75,16 @@ return s;
         return BMR;
     }
     //________________________________________________________________________________________________________________//
-    public static double [] userInfo(Member member){
+    public static double [] userInfo(Member member, Scanner sc){
         double[] info = new double[4];
         if(member != null && member.getSignedIn()&& member.getHeight() > 0) {
             info[0] = member.getGender();
             info[1] = member.getWeight();
             info[2] = member.getHeight();
             info[3] = member.getAge();
-        }else {
+        }else{
             // before asking user can choicee get BMR or search for food
-            Scanner sc = new Scanner(System.in);
+
             double gender;
             System.out.println("please provide us with your gender male or female");
             String strGender = sc.next().toLowerCase();
@@ -124,8 +125,8 @@ return s;
         return info;
     }
     //________________________________________________________________________________________________________________//
-    public static String foodName(){
-        Scanner sc = new Scanner(System.in);
+    public static String foodName(Scanner sc){
+
         System.out.println("Please Enter name of the food, only letters are expted:) ");
         System.out.print(">");
         String frutes = sc.next().strip().toLowerCase();
@@ -147,21 +148,25 @@ return s;
 
     }
     //________________________________________________________________________________________________________________//
-    public static Member registration(boolean newUser) throws Exception {
+    public static Member registration(boolean newUser, Scanner sc) throws Exception {
 
-        Scanner sc = new Scanner(System.in);
 
-        System.out.println("please provide us with your user name: ");
-        String userName = sc.next();
-        System.out.println("now please provide us with your password: ");
-        String password = sc.next();
-
-        return signUpIn(userName,password,newUser);
+        Member member = new Member("a","1");
+        while(true) {
+            System.out.println("please provide us with your user name: ");
+            String userName = sc.next();
+            System.out.println("now please provide us with your password: ");
+            String password = sc.next();
+            member = signUpIn(userName,password,newUser);
+            if (member.getSignedIn())
+                break;
+        }
+        return member;
 
     }
     //________________________________________________________________________________________________________________//
-    public static void mainMenu() throws Exception {
-        Scanner sc = new Scanner(System.in);
+    public static void mainMenu(InputStream in) throws Exception {
+        Scanner sc = new Scanner(in);
         Member user;
 
         System.out.println("""
@@ -170,30 +175,26 @@ return s;
                 wanna be a member? please type 2
                 or type 3 to skip (being a member will give you a full monitoring to your biometric signs)""");
         char choice = sc.next().charAt(0);
-        while ((choice != '1') && (choice != '2') && (choice != '3')) {
+        while ((choice != '1') && (choice != '2') && (choice != '3'))
+        {
             System.out.println("please enter a valid number (1,2,3)");
             choice = sc.next().charAt(0);
-
         }
         switch (choice){
             // note: add welcome with name and welcome with guest
             case '1':
                 System.out.println("welcome back!");
-                user = registration(false);
-
-                logedInSubMenu(user);
+                user = registration(false, sc);
+                logedInSubMenu(user, sc);
                 break;
             case '2':
                 System.out.println("we are honored!");
 
-                user = registration(true);
-                logedInSubMenu(user);
-
-
-
+                user = registration(true,sc);
+                logedInSubMenu(user,sc);
                 break;
             case '3' :
-                geustMenu();
+                geustMenu(sc);
                 break;
 
 
@@ -201,81 +202,115 @@ return s;
 
     }
     //________________________________________________________________________________________________________________//
-    public static void geustMenu() throws Exception {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("""
-                Now what would you like to do?
-                1- search for a meal
-                2- calculate your BMR
-                """);
-        int choice = sc.nextInt();
-        switch (choice){
-            case 1:
-                System.out.println(getCaloricInfo(foodName(), null)); break;
-            case 2:
-                System.out.println("Your BMR is : "+BMRCalculator(userInfo(null))); break;
-        }
-
+    public static void geustMenu(Scanner sc) throws Exception {
+while(true) {
+    System.out.println("""
+            Now what would you like to do?
+            1- search for a meal
+            2- calculate your BMR
+            3- to exit program
+            """);
+    char choice = sc.next().charAt(0);
+    while ((choice != '1') && (choice != '2') && (choice != '3')) {
+        System.out.println("please enter a valid number (1,2,3)");
+        choice = sc.next().charAt(0);
+    }
+    switch (choice) {
+        case '1':
+            System.out.println(getCaloricInfo(foodName(sc), null));
+            break;
+        case '2':
+            System.out.println("Your BMR is : " + BMRCalculator(userInfo(null, sc)));
+            break;
+        case '3':
+            System.exit(0);
+    }
+}
 
     }
     //________________________________________________________________________________________________________________//
-    public static void logedInSubMenu(Member member) throws Exception {
+    public static void logedInSubMenu(Member member, Scanner sc) throws Exception
+    {
         while(true){
-        Scanner sc = new Scanner(System.in);
+
         System.out.println("""
                 Now what would you like to do?(digit only)
                 1- search for a meal
                 2- enter last meal
                 3- calculate your BMR
                 4- statistics
-                5- add meals""");
-        int choice = sc.nextInt();
-        switch (choice){
+                5- add meals
+                6-exit""");
+            char choice = sc.next().charAt(0);
+            while ((choice != '1') && (choice != '2') && (choice != '3') && (choice != '4') && (choice != '5') && (choice != '6'))
+            {
+                System.out.println("please enter a valid number (1,2,3,4,5,6)");
+                choice = sc.next().charAt(0);
+            }
+            switch (choice){
 
-            case 1: System.out.println(getCaloricInfo(foodName(), member)); break;
-            //________________________________________________________________________________________________________//
-            case 2:
-                System.out.println("please provide me with your last meal name: ");
-                String mealName = sc.next();
-                System.out.println("meal's calorie: ");
-                int calorie = sc.nextInt();
-                member.registerMeal(mealName,calorie);
-                break;
+                case '1':
+                    System.out.println(getCaloricInfo(foodName(sc), member));
+                    break;
 
-            //________________________________________________________________________________________________________//
-            case 3:
-                System.out.println("Your BMR is : "+BMRCalculator(userInfo(member))); break;
+                  //________________________________________________________________________________________________________//
+                case '2':
+                    System.out.println("please provide me with your last meal name: ");
+                    String mealName = sc.next();
+                    System.out.println("meal's calorie: ");
+                    int calorie = sc.nextInt();
+                    member.registerMeal(mealName,calorie);
+                    break;
+
+                //________________________________________________________________________________________________________//
+                case '3':
+                    System.out.println("Your BMR is : "+BMRCalculator(userInfo(member, sc)));
+                    break;
 
 
-            //________________________________________________________________________________________________________//
-            case 4:
-                System.out.println("""
-                        Okay let's see ;)
-                        how do you like it?(digit only)
-                        1-weekly(7 days)
-                        2-monthly(30 days)
-                        3-custom
-                        """);
-                int type = sc.nextInt();
-                switch (type){
-                    case 1: member.stats(7);break;
-                    case 2: member.stats(30);break;
-                    case 3:
-                        System.out.print("how many days you want to calculate(digit only)");
-                        member.stats(sc.nextInt());
-                }
-                break;
-            case 5:
-                System.out.println("please provide me with your new meal name: ");
-                String newMealName = sc.next();
-                System.out.println("meal's calorie: ");
-                int newCalorie = sc.nextInt();
-                member.addCustomMeal(newMealName,newCalorie);
-                break;
+                //________________________________________________________________________________________________________//
+                case '4':
+                    System.out.println("""
+                            Okay let's see ;)
+                            how do you like it?(digit only)
+                            1-weekly(7 days)
+                            2-monthly(30 days)
+                            3-custom
+                            """);
+
+                    char type = sc.next().charAt(0);
+                    while ((type != '1') && (type != '2') && (type != '3'))
+                    {
+                        System.out.println("please enter a valid number (1,2,3)");
+                        type = sc.next().charAt(0);
+                    }
+                    switch (type)
+                        {
+                        case '1':
+                            member.stats(7);
+                            break;
+                        case '2':
+                            member.stats(30);
+                            break;
+                        case '3':
+                            System.out.print("how many days you want to calculate(digit only)");
+                            member.stats(sc.nextInt());
+                        }
+                        break;
+                case '5':
+                    System.out.println("please provide me with your new meal name: ");
+                    String newMealName = sc.next();
+                    System.out.println("meal's calorie: ");
+                    int newCalorie = sc.nextInt();
+                    member.addCustomMeal(newMealName,newCalorie);
+                    break;
+
+
+                case '6':
+                    System.exit(0);
+            }
         }
-
-
-    }}
+    }
 
 
 

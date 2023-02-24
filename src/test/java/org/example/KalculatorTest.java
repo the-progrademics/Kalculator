@@ -2,8 +2,12 @@ package org.example;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
+import java.util.Scanner;
 
 import static org.example.Kalculator.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,6 +18,34 @@ import static org.junit.jupiter.api.Assertions.*;
 public class KalculatorTest
 
 {
+    @Test
+    public void testMenus() throws Exception {
+    mainMenu(getInputStream(".\\testers\\test2.txt"));
+    }
+
+    @Test
+    public void testMenus2() throws Exception {
+        mainMenu(getInputStream(".\\testers\\test3.txt"));
+    }
+
+
+    @Test
+    public void testUserInfo() throws IOException {
+        var member = maleTestSubject();
+        assertEquals("0,70,160,25",(""+member.getGender()+","+(int)member.getWeight()+","+(int)member.getHeight()+","+(int)member.getAge()));
+        var returendMember = new Member("ahmad", "123");
+        returendMember.setSignedIn(true);
+        Scanner sc = new Scanner(getInputStream(".\\testers\\test1.txt"));
+        returendMember.saveInfo(userInfo(returendMember, sc));
+        assertTrue(member.equals(returendMember));
+
+        var returendMember1 = new Member("ahmad", "123");
+        returendMember1.setSignedIn(true);
+        Scanner sc1 = new Scanner(getInputStream(".\\testers\\test1.txt"));
+        returendMember1.saveInfo(userInfo(returendMember1, sc1));
+        assertTrue(member.equals(returendMember1));
+
+    }
     private final Kalculator Kal = new Kalculator();
 
     @Test
@@ -32,7 +64,7 @@ public class KalculatorTest
     public void testGetCaloricInfo() throws Exception {
         assertEquals("Sorry, we have no data associated with the food you typed",getCaloricInfo ("fake food", null));
         assertEquals("Sherbet Orange\n"+" contains: 144 Calories per 100 grams.\n"+"\n",getCaloricInfo ("Sherbet Orange", null));
-        assertEquals("Falafel\n" + " contains: 333 Calories per 100 grams.\n" +"\n" +"falafel\n" +" contains: 650 Calories per 100 grams.\n" +"\n",getCaloricInfo ("falafel", maleTestSubject()));
+        assertEquals("Falafel\n" + " contains: 333 Calories per 100 grams.\n\n",getCaloricInfo ("falafel", maleTestSubject()));
     }
     @Test
     public void testMember(){
@@ -66,6 +98,8 @@ public class KalculatorTest
         assertTrue(newUser.equals(returnedNewUser));
         //errors test
     }
+
+    //run the method below twice; because it may fail the first time (database content not initialized)
     @Test
     public void testMemberSignInAndSignUp() throws SQLException {
         Member ahmad = new Member("ahmad","123");
@@ -119,19 +153,13 @@ public class KalculatorTest
     }
 
 
+    public InputStream getInputStream(String str) throws IOException {
 
-
-
-
-
-
-
-
-
-
-
-
-
+        File f = new File(str);
+        if(!f.exists())
+            f.createNewFile();
+        return new FileInputStream(f);
+    }
 
 
     public Member maleTestSubject(){

@@ -17,8 +17,12 @@ public class DBConnection{
         this.port = 5432;
         this.url = "jdbc:postgresql://localhost:" + Integer.toString(this.port) + "/" + this.dbName;
         Properties props = new Properties();
+
+        //change the below values according to your database////////////////////////////////////////////////////////////
         props.setProperty("user","postgres");
-        props.setProperty("password","0");
+        props.setProperty("password","fakepassword");
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         props.setProperty("ssl","false");
         this.connection = DriverManager.getConnection(url, props);
     }
