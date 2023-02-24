@@ -74,16 +74,16 @@ return s;
         return BMR;
     }
     //________________________________________________________________________________________________________________//
-    public static double [] userInfo(Member member){
+    public static double [] userInfo(Member member, InputStream in){
         double[] info = new double[4];
         if(member != null && member.getSignedIn()&& member.getHeight() > 0) {
             info[0] = member.getGender();
             info[1] = member.getWeight();
             info[2] = member.getHeight();
             info[3] = member.getAge();
-        }else {
+        }else{
             // before asking user can choicee get BMR or search for food
-            Scanner sc = new Scanner(System.in);
+            Scanner sc = new Scanner(in);
             double gender;
             System.out.println("please provide us with your gender male or female");
             String strGender = sc.next().toLowerCase();
@@ -213,7 +213,7 @@ return s;
             case 1:
                 System.out.println(getCaloricInfo(foodName(), null)); break;
             case 2:
-                System.out.println("Your BMR is : "+BMRCalculator(userInfo(null))); break;
+                System.out.println("Your BMR is : " + BMRCalculator(userInfo(null, System.in))); break;
         }
 
 
@@ -253,7 +253,7 @@ return s;
 
                 //________________________________________________________________________________________________________//
                 case '3':
-                    System.out.println("Your BMR is : "+BMRCalculator(userInfo(member)));
+                    System.out.println("Your BMR is : "+BMRCalculator(userInfo(member, System.in)));
                     break;
 
 

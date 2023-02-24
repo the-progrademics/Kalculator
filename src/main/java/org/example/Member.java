@@ -213,7 +213,7 @@ return result;
 
     public boolean equals(Member member){
         boolean result = true;
-        if(!(this.name == member.getName() && this.password == member.getPassword() && this.signedIn == member.getSignedIn() && this.gender == member.getGender() && this.weight  == member.getWeight() && this.height == member.getHeight() && this.age == member.getAge())){
+        if(!(this.name.equals(member.getName()) && this.password.equals(member.getPassword()) && this.signedIn == member.getSignedIn() && this.gender == member.getGender() && this.weight  == member.getWeight() && this.height == member.getHeight() && this.age == member.getAge())){
             result = false;
         }
         return result;

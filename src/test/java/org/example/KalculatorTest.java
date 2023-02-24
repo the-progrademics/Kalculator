@@ -2,7 +2,10 @@ package org.example;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 
 import static org.example.Kalculator.*;
@@ -14,15 +17,30 @@ import static org.junit.jupiter.api.Assertions.*;
 public class KalculatorTest
 
 {
+    public InputStream getInputStream(String str) throws IOException {
+
+        File f = new File(str);
+        if(!f.exists())
+            f.createNewFile();
+        return new FileInputStream(f);
+    }
+
 
 
     @Test
-    public void testUserInfo(){
-        var member = new Member("ahmed", "123");
-        member = maleTestSubject();
-
+    public void testUserInfo() throws IOException {
+        var member = maleTestSubject();
         assertEquals("0 70 160 25","%d %d %d %d".formatted(member.getGender(),(int)member.getWeight(),(int)member.getHeight(),(int)member.getAge()));
-        assertEquals(" ", userInfo(null));
+        var returendMember = new Member("ahmad", "123");
+        returendMember.setSignedIn(true);
+        returendMember.saveInfo(userInfo(returendMember, getInputStream(".\\test.txt")));
+        assertTrue(member.equals(returendMember));
+
+        var returendMember1 = new Member("ahmad", "123");
+        returendMember1.setSignedIn(true);
+        returendMember1.saveInfo(userInfo(returendMember1, getInputStream(".\\test1.txt")));
+        assertTrue(member.equals(returendMember1));
+
     }
     private final Kalculator Kal = new Kalculator();
 
