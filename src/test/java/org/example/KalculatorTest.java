@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
+import java.util.Scanner;
 
 import static org.example.Kalculator.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,14 +18,11 @@ import static org.junit.jupiter.api.Assertions.*;
 public class KalculatorTest
 
 {
-    public InputStream getInputStream(String str) throws IOException {
 
-        File f = new File(str);
-        if(!f.exists())
-            f.createNewFile();
-        return new FileInputStream(f);
+    @Test
+    public void testMenus() throws Exception {
+    mainMenu(getInputStream(".\\testmainmenue1.txt"));
     }
-
 
 
     @Test
@@ -33,12 +31,14 @@ public class KalculatorTest
         assertEquals("0 70 160 25","%d %d %d %d".formatted(member.getGender(),(int)member.getWeight(),(int)member.getHeight(),(int)member.getAge()));
         var returendMember = new Member("ahmad", "123");
         returendMember.setSignedIn(true);
-        returendMember.saveInfo(userInfo(returendMember, getInputStream(".\\test.txt")));
+        Scanner sc = new Scanner(getInputStream(".\\test.txt"));
+        returendMember.saveInfo(userInfo(returendMember, sc));
         assertTrue(member.equals(returendMember));
 
         var returendMember1 = new Member("ahmad", "123");
         returendMember1.setSignedIn(true);
-        returendMember1.saveInfo(userInfo(returendMember1, getInputStream(".\\test1.txt")));
+        Scanner sc1 = new Scanner(getInputStream(".\\test.txt"));
+        returendMember1.saveInfo(userInfo(returendMember1, sc1));
         assertTrue(member.equals(returendMember1));
 
     }
@@ -145,6 +145,24 @@ public class KalculatorTest
         assertEquals("over the last 1 you are still under the ideal limit for your BMR by:  75Calories",testMan.stats(1));
         assertEquals("over the last -1 you went over the ideal limit for your BMR by:  75Calories",testMan.stats(-1));
     }
+
+
+
+
+
+
+
+
+
+
+    public InputStream getInputStream(String str) throws IOException {
+
+        File f = new File(str);
+        if(!f.exists())
+            f.createNewFile();
+        return new FileInputStream(f);
+    }
+
 
     public Member maleTestSubject(){
         Member member = new Member("ahmad","123");
