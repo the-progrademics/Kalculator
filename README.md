@@ -1,4 +1,6 @@
-
+coverage
+----------------------
+	https://github.com/the-progrademics/Kalculator/main/TEST_COVERAGE.PNG?raw=true)
 
 Database prerequisets to running the program or tests:
 
